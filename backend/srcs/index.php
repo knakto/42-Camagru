@@ -2,8 +2,11 @@
 
 require_once __DIR__ . '/user/controller.php';
 
-var_dump($_SERVER['REQUEST_METHOD']);
-var_dump($_POST);
+echo "<pre>";
+print_r($_SERVER);
+print_r($_POST);
+print_r($_GET);
+echo "</pre>";
 
 $userCtr = new UserController();
 

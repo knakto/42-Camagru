@@ -13,4 +13,7 @@ class UserController{
   function getUser(): string {
     return (string)$this->user->getUsername();
   }
+
+  function createSession(): string {
+  }
 }
