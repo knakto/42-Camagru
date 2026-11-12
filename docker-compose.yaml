@@ -1,0 +1,29 @@
+services:
+  frontend:
+    build: frontend
+    image: frontgru
+    container_name: frontgru
+    env_file: .env
+    networks:
+      - camagru
+  backend:
+    build: backend
+    image: backgru
+    container_name: backgru
+    env_file: .env
+    networks:
+      - camagru
+  nginx:
+    build: nginx
+    image: nginxgru
+    container_name: nginxgru
+    env_file: .env
+    networks:
+      - camagru
+    ports:
+      - "8443:8443"
+
+networks:
+  camagru:
+    name: camagru
+    driver: bridge
