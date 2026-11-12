@@ -6,6 +6,7 @@ async function verify_permission(private_route) {
 }
 
 async function serve_first_page() {
+  await AuthPage();
 }
 
 async function route() {

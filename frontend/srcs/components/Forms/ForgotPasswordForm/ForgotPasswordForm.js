@@ -2,7 +2,7 @@ export function ForgotPasswordForm() {
     const form = document.createElement("form");
 
     form.id = "forgot-password-form";
-    form.action = "/api";
+    form.action = "/api/";
     form.method = "post";
 
     form.className = `
