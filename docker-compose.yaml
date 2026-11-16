@@ -1,4 +1,13 @@
 services:
+  database:
+    image: mysql:26.10.0
+    container_name: databasegru
+    env_file:
+      - .env
+    volumes:
+      - ./backend/database/:/var/lib/mysql
+    networks:
+      - camagru
   frontend:
     build: frontend
     image: frontgru
@@ -13,6 +22,8 @@ services:
     env_file: .env
     networks:
       - camagru
+    depends_on:
+      - database
   nginx:
     build: nginx
     image: nginxgru
