@@ -2,3 +2,4 @@
 default.nix
 .env
 **/.env
+backend/database
