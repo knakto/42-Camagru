@@ -1,13 +1,28 @@
 services:
+  myadmin:
+    image: phpmyadmin:5.2.3-fpm-alpine
+    container_name: admingru
+    env_file:
+      - .env
+    networks:
+      - camagru
+    depends_on:
+      - database
+    expose:
+      - 9000
   database:
     image: mysql:26.10.0
     container_name: databasegru
     env_file:
       - .env
     volumes:
-      - ./backend/database/:/var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
       - camagru
+    expose:
+      - 3306
+    ports:
+      - "3306:3306"
   frontend:
     build: frontend
     image: frontgru
@@ -15,6 +30,8 @@ services:
     env_file: .env
     networks:
       - camagru
+    expose:
+      - 80
   backend:
     build: backend
     image: backgru
@@ -24,6 +41,8 @@ services:
       - camagru
     depends_on:
       - database
+    expose:
+      - 9000
   nginx:
     build: nginx
     image: nginxgru
@@ -42,8 +61,14 @@ services:
       - ./backend/spec-openapi.json:/spec-openapi.json
     networks:
       - camagru
+    expose:
+      - 8080
 
 networks:
   camagru:
     name: camagru
     driver: bridge
+
+volumes:
+  db_data:
+
