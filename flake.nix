@@ -12,9 +12,9 @@
       myPhp = pkgs.php.buildEnv {
         extensions = ({ enabled, all }: enabled ++ (with all; [
           pdo
-          pdo_mysql   # For MySQL / MariaDB
-          pdo_pgsql   # For PostgreSQL
-          pdo_sqlite  # For SQLite
+          pdo_mysql
+          pdo_pgsql
+          pdo_sqlite
         ]));
       };
     in
@@ -23,27 +23,9 @@
         name = "camagru-env";
         paths = with pkgs; [
           myPhp
-          nodejs_22
-          git
+            nodejs_22
+            git
         ];
-      };
-
-      devShells.${system}.default = pkgs.mkShell {
-        packages = [
-          myPhp
-          pkgs.nodejs_22
-          pkgs.git
-        ];
-
-        shellHook = ''
-          # Auto-load .env if it exists in the project root
-          if [ -f .env ]; then
-            set -a
-            source .env
-            set +a
-            echo "Loaded environment variables from .env"
-          fi
-        '';
       };
     };
 }
