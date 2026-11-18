@@ -19,7 +19,7 @@ class Database {
     $user = getenv("MYSQL_USER");
     $dbname = getenv("MYSQL_DATABASE");
     $password = getenv("MYSQL_PASSWORD");
-    $host = "127.0.0.1";
+    $host = getenv("SERVER_HOST");
     $charset = "utf8mb4";
     $dns = "mysql:dbname=$dbname;host=$host;charset=$charset";
     $options = [
@@ -29,7 +29,7 @@ class Database {
     ];
 
     try {
-      $pdo = new PDO($dns, $user, $password, $options);
+      $this->pdo = new PDO($dns, $user, $password, $options);
     } catch (Exception $e){
       http_response_code(500);
       this->showError(e);
@@ -59,4 +59,43 @@ class Database {
   //===================== Service =========================//
 
   private $pdo;
+
+  /**
+    * Fetch records from the database.
+    *
+    * @param string $query SQL query
+    * @param array $var Query parameters
+    * @return array
+   */
+  public function fetch(string $query, array $var = []):array|false {
+    $stmt = $this->pdo->prepare($query . ";");
+    $stmt->execute($var);
+    $res = $stmt->fetch();
+    return $res;
+  }
+
+  /**
+    * Fetch all records from the database.
+    *
+    * @param string $query SQL query
+    * @param array $var Query parameters
+    * @return array
+   */
+  public function fetchAll(string $query, array $var = []):array|false {
+    $stmt = $this->pdo->prepare($query . ";");
+    $stmt->execute($var);
+    $res = $stmt->fetchAll();
+    return $res;
+  }
+
+  /**
+   * Execute query
+   *
+   * @param string $query SQL query
+   * @param array $var Query parameters
+   */
+  public function execute(string $query, array $var):void {
+    $stmt = $this->pdo->prepare($query . ";");
+    $stmt->execute($var);
+  }
 }
