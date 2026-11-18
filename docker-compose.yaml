@@ -1,6 +1,6 @@
 services:
   myadmin:
-    image: phpmyadmin:5.2.3-fpm-alpine
+    image: phpmyadmin:5.2.3-apache
     container_name: admingru
     env_file:
       - .env
@@ -9,7 +9,7 @@ services:
     depends_on:
       - database
     expose:
-      - 9000
+      - 80
   database:
     image: mysql:26.10.0
     container_name: databasegru
