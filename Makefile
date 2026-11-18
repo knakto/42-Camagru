@@ -1,5 +1,8 @@
 NAME			:= camagru
 COMPOSE		:= docker compose
+PHP				:= php
+SHELL 		:= /bin/bash
+
 
 all: $(NAME)
 
@@ -30,7 +33,12 @@ fclean: clean
 
 re: clean up
 
-test:
-	php -S localhost:3000 -t backend/srcs
+test: source_env
+	$(PHP) -S localhost:3000 backend/srcs/index.php
 
-.PHONY: all up down stop start restart logs clean fclean re
+source_env:
+	set -a
+	source .env
+	set +a
+
+.PHONY: all up down stop start restart logs clean fclean re source_env
