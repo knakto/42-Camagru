@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types=1); namespace database;
+
+use PDO;
+use Exception;
 
 /*
  * ======= Database class ========
@@ -14,6 +17,7 @@ class Database {
   public function __wakeup():void { throw new \Exception("Cannot unserialize a singleton."); }
 
   private static $instances = [];
+  private $pdo;
 
   private function __construct() {
     $user = getenv("MYSQL_USER");
@@ -32,7 +36,7 @@ class Database {
       $this->pdo = new PDO($dns, $user, $password, $options);
     } catch (Exception $e){
       http_response_code(500);
-      this->showError(e);
+      $this->showError($e);
       exit(1);
     }
   }
@@ -47,7 +51,7 @@ class Database {
       echo "</pre>";
   }
 
-  static function getInstance (): Database {
+  public static function getInstance (): Database {
     $cls = static::class;
     if (!isset(self::$instances[$cls])) {
       self::$instances[$cls] = new static();
@@ -56,46 +60,8 @@ class Database {
     return self::$instances[$cls];
   }
 
-  //===================== Service =========================//
-
-  private $pdo;
-
-  /**
-    * Fetch records from the database.
-    *
-    * @param string $query SQL query
-    * @param array $var Query parameters
-    * @return array
-   */
-  public function fetch(string $query, array $var = []):array|false {
-    $stmt = $this->pdo->prepare($query . ";");
-    $stmt->execute($var);
-    $res = $stmt->fetch();
-    return $res;
-  }
-
-  /**
-    * Fetch all records from the database.
-    *
-    * @param string $query SQL query
-    * @param array $var Query parameters
-    * @return array
-   */
-  public function fetchAll(string $query, array $var = []):array|false {
-    $stmt = $this->pdo->prepare($query . ";");
-    $stmt->execute($var);
-    $res = $stmt->fetchAll();
-    return $res;
-  }
-
-  /**
-   * Execute query
-   *
-   * @param string $query SQL query
-   * @param array $var Query parameters
-   */
-  public function execute(string $query, array $var):void {
-    $stmt = $this->pdo->prepare($query . ";");
-    $stmt->execute($var);
+  public function getPDO():PDO
+  {
+    return $this->pdo;
   }
 }
