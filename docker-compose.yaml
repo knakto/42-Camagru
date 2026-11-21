@@ -10,19 +10,30 @@ services:
       - database
     expose:
       - 80
+
   database:
     image: mysql:26.10.0
     container_name: databasegru
     env_file:
       - .env
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql:rw
+      - ./database/migration.sql:/docker-entrypoint-initdb.d/migration.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+      - ./database/healthcheck.sh:/healthcheck.sh:ro
     networks:
       - camagru
     expose:
       - 3306
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   frontend:
     build: frontend
     image: frontgru
@@ -32,6 +43,7 @@ services:
       - camagru
     expose:
       - 80
+
   backend:
     build: backend
     image: backgru
@@ -43,6 +55,7 @@ services:
       - database
     expose:
       - 9000
+
   nginx:
     build: nginx
     image: nginxgru
@@ -52,13 +65,14 @@ services:
       - camagru
     ports:
       - "8443:8443"
+
   swagger:
     image: docker.swagger.io/swaggerapi/swagger-ui
     container_name: swaggru
     environment:
       - SWAGGER_JSON=/spec-openapi.json
     volumes:
-      - ./backend/spec-openapi.json:/spec-openapi.json
+      - ./backend/spec-openapi.json:/spec-openapi.json:ro
     networks:
       - camagru
     expose:
