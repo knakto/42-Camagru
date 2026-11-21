@@ -1,10 +1,23 @@
-FROM nginx:1.31.8-alpine
+FROM node:27.0.0-alpha.0.1.0-alpine3.23 AS build
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
+
+COPY package*.json .
+RUN npm ci
+
+COPY index.html index.html
+COPY public/ public
+COPY src/ src
+
+RUN npm run build
+
+#======================================================
+
+FROM nginx:1.31.8-alpine AS deploy
 
 WORKDIR /usr/share/nginx/html
-
-COPY srcs/ .
+COPY --from=build /app/dist .
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
