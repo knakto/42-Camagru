@@ -37,8 +37,6 @@ class Query {
     else
       $stmt->execute();
     $this->result = $stmt->fetchAll();
-    echo $this->statement."\n";
-    print_r($this->result);
   }
 
   /**
@@ -309,5 +307,9 @@ class Query {
    */
   public static function delete(array $query):Query{
     return new Query(self::DELETE, $query);
+  }
+
+  public function get(): array{
+    return $this->result;
   }
 }

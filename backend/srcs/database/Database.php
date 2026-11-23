@@ -23,7 +23,7 @@ class Database {
     $user = getenv("MYSQL_USER");
     $dbname = getenv("MYSQL_DATABASE");
     $password = getenv("MYSQL_PASSWORD");
-    $host = getenv("SERVER_HOST");
+    $host = "database";
     $charset = "utf8mb4";
     $dns = "mysql:dbname=$dbname;host=$host;charset=$charset";
     $options = [
