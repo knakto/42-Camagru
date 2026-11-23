@@ -2,7 +2,7 @@ export default function SignupForm() {
     const form = document.createElement("form");
 
     form.id = "signup-form";
-    form.action = "/api/";
+    form.action = "/api/v1/register";
     form.method = "post";
 
     form.className = `

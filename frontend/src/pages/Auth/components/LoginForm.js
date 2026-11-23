@@ -2,7 +2,7 @@ export default function LoginForm() {
     const form = document.createElement("form");
 
     form.id = "login-form";
-    form.action = "/api/login-user";
+    form.action = "/api/v1/login";
     form.method = "post";
 
 
