@@ -20,7 +20,7 @@ FROM seq;
 
 -- Insert parent table
 INSERT INTO users (
-    user_id, username, email, password, status, verify_token
+    user_id, username, email, password, status, verify_token, token_expired_at
 )
 SELECT
     user_id,
@@ -28,7 +28,8 @@ SELECT
     email,
     '$2y$12$hRukrcv14QS2Y/ojN3Iw8OkMqVrCR4gZkfOi64WZlJlRN7m9Znplu',
     'active',
-    UUID()
+    UUID(),
+    CURRENT_TIMESTAMP
 FROM seed_users;
 
 -- Insert child table
