@@ -34,7 +34,7 @@ fclean: clean
 re: clean up
 
 test: source_env
-	$(PHP) -S localhost:3000 backend/srcs/index.php
+	$(PHP) -S localhost:3000 backend/api/index.php
 
 source_env:
 	set -a
