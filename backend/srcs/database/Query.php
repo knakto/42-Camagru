@@ -119,6 +119,7 @@ class Query {
     $table = "";
     $fields = "";
     $values = "";
+    $i = 0;
 
     if (!(isset($query["table"]) && isset($query["set"])))
       throw new Exception("Invalid INSERT query.");
@@ -137,9 +138,17 @@ class Query {
         throw new Exception("Insert must use string to set fields.");
       $fields = "$fields `$key`";
       if (!is_string($value))
-        $values = "$values $value";
+      {
+        $values = "$values :$i";
+        $this->paramiters["$i"] = $value;
+        $i++;
+      }
       else
-        $values = "$values '$value'";
+      {
+        $values = "$values :$i";
+        $this->paramiters["$i"] = "$value";
+        $i++;
+      }
       if ($key != $last_set)
       {
         $fields = "$fields, ";
