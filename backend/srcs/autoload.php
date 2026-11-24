@@ -3,7 +3,7 @@
 function response(int $code, mixed $response = ""):void {
   http_response_code($code);
   if (!empty($response))
-    echo "<pre>", json_encode($response), "</pre>";
+    echo json_encode($response);
   session_write_close();
   exit;
 }
