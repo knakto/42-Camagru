@@ -22,6 +22,7 @@ class Route {
    * @property "path" => [method, requred_auth, class_callback, function_callback],
    */
   public const routePath = [
+    "/is-auth"      => [self::GET , true , Route::class, "auth"],
     "/health"       => [self::GET , false, Route::class, "health"],
     "/register"     => [self::POST, false, User::class , "register"],
     "/login"        => [self::POST, false, User::class , "login"],
@@ -86,6 +87,13 @@ class Route {
   private static function health():void 
   {
     response(200, ["status" => "healthy"]);
+  }
+
+  private static function auth():void 
+  {
+    if (isset($_SESSION['user_id']))
+      response(200, ["status" => "authen"]);
+    response(401);
   }
 
   public static function startRoute():void
