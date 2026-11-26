@@ -1,5 +1,3 @@
-import SidebarIcon from '/layout-sidebar.svg';
-
 export default function MainLayout(){
   return `
     <section id="root" class="w-screen h-screen overflow-hidden bg-black flex flex-col-reverse xl:flex-row">

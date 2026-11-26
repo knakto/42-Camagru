@@ -1,4 +1,4 @@
-import route from "./services/Route";
+import router from "./controllers/RouterService";
 import "./style.css";
 
-route.navigate(window.location.pathname);
+router.navigate(window.location.pathname);
