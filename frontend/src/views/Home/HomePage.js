@@ -1,4 +1,4 @@
-import layouts from "../../controllers/LayoutsModule.js";
+import layouts from "../../controllers/LayoutsService.js";
 
 
 function Sidebar(){
@@ -210,8 +210,10 @@ export async function HomePage() {
   const sidebar = document.querySelector("#sidebar");
   const nav = document.querySelector("#navbar");
 
-  content.innerHTML = CreatePost();
-  CreatePostEventBinding();
+  // content.innerHTML = CreatePost();
+  // CreatePostEventBinding();
+  //
+  content.innerHTML = Content();
 
   sidebar.innerHTML = Sidebar();
   nav.innerHTML = Navbar();

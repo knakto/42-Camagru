@@ -1,6 +1,6 @@
-import layouts from "../../controllers/LayoutsModule";
-import PreferencesSidebar from "./components/PreferencesSidebar";
-import UserPreferences from "./components/UserPreferences";
+import layouts from "../../controllers/LayoutsService.js";
+import PreferencesSidebar from "./components/PreferencesSidebar.js";
+import UserPreferences from "./components/UserPreferences.js";
 
 export default function PreferencesPage() {
   layouts.setLayout("main");

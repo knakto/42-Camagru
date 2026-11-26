@@ -1,6 +1,6 @@
 
 export default function LoginForm() {
-    const form = `
+    return `
         <form id="login-form" class="flex w-full max-w-md flex-col gap-5 rounded-2xl bg-white p-8 font-sans">
 
             <div class="mb-2 text-center">
@@ -81,7 +81,5 @@ export default function LoginForm() {
 
         </form>
     `;
-
-    return form;
 }
 

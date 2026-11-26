@@ -1,5 +1,5 @@
 export default function ResetPasswordForm() {
-    const form = `
+    return `
       <form id="reset-password-form" class="flex w-full max-w-md flex-col gap-5 rounded-2xl bg-white p-8 font-sans">
 
         <div class="mb-2 text-center">
@@ -70,7 +70,5 @@ export default function ResetPasswordForm() {
 
       </form>
     `;
-
-    return form;
 }
 

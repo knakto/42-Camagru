@@ -1,6 +1,6 @@
 
-export function ForgotPasswordForm() {
-    const form = `
+export default function ForgotPasswordForm() {
+    return `
       <form id="forgot-password-form" class="flex w-full max-w-md flex-col gap-5 rounded-2xl bg-white p-8 font-sans">
 
         <div class="mb-2 text-center">
@@ -50,9 +50,5 @@ export function ForgotPasswordForm() {
 
       </form>
     `;
-
-    return form;
 }
-
-export default ForgotPasswordForm;
 

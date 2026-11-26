@@ -1,5 +1,5 @@
 export default function EmailVerificationExpired() {
-    const content = `
+    return `
       <div class="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl bg-white p-8 font-sans text-center">
 
         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
@@ -46,7 +46,5 @@ export default function EmailVerificationExpired() {
 
       </div>
     `;
-
-    return content;
 }
 

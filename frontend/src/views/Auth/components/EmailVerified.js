@@ -1,5 +1,5 @@
 export default function EmailVerified() {
-    const content = `
+    return `
       <div class="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl bg-white p-8 font-sans text-center">
 
         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
@@ -33,7 +33,5 @@ export default function EmailVerified() {
 
       </div>
     `;
-
-    return content;
 }
 

@@ -1,6 +1,5 @@
-
 export default function SignupForm() {
-    const form = `
+    return `
     <form id="signup-form" class="flex w-full max-w-md flex-col gap-5 rounded-2xl bg-white p-8 font-sans">
 
         <div class="mb-2 text-center">
@@ -27,6 +26,11 @@ export default function SignupForm() {
                 required
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
+            <p
+                id="signup-username-error"
+                class="hidden text-xs text-red-500"
+                aria-live="polite"
+            ></p>
         </div>
 
         <div class="flex flex-col gap-2">
@@ -42,6 +46,11 @@ export default function SignupForm() {
                 required
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
+            <p
+                id="signup-email-error"
+                class="hidden text-xs text-red-500"
+                aria-live="polite"
+            ></p>
         </div>
 
         <div class="flex flex-col gap-2">
@@ -54,7 +63,6 @@ export default function SignupForm() {
                 name="password"
                 placeholder="Create a password"
                 autocomplete="new-password"
-                minlength="8"
                 required
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
@@ -76,6 +84,11 @@ export default function SignupForm() {
                 required
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
+            <p
+                id="signup-password-error"
+                class="hidden text-xs text-red-500"
+                aria-live="polite"
+            ></p>
         </div>
 
         <button
@@ -98,7 +111,5 @@ export default function SignupForm() {
 
     </form>
     `;
-
-    return form;
 }
 
