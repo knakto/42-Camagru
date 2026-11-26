@@ -1,13 +1,17 @@
 export default class AuthModel {
   showForm(formType){
     const positions = {
-      login: "-translate-x-1/3",
-      signup: "-translate-x-2/3",
       forgot: "translate-x-0",
+      login: "-translate-x-1/7",
+      signup: "-translate-x-2/7",
+      resetPassword: "-translate-x-3/7",
+      emailExpired: "-translate-x-4/7",
+      emailRequired: "-translate-x-5/7",
+      emailVerified: "-translate-x-6/7",
     };
 
     const track = document.querySelector("#track");
-    track.className = ` flex w-[300%] transition-transform duration-500 ease-in-out ${positions[formType]} `;
+    track.className = ` flex w-[700%] ${positions[formType]} `;
   }
 
   validatePassword(password, cmfpassword)
