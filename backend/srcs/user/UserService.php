@@ -65,10 +65,22 @@ function dbAddUser(string $username, string $email, string $password, $expire):v
     Query::insert($query);
   }catch(Exception $e)
   {
-    if (str_starts_with($e->getMessage(), "SQLSTATE[23000]:"))
-      response(409);
+    $mysqlErrorCode = $e->errorInfo[1] ?? null;
+    $mysqlErrorMessage = $e->errorInfo[2] ?? '';
+
+    if ($mysqlErrorCode === 1062)
+    {
+      $message = "";
+      if (str_contains($mysqlErrorMessage, 'email')) {
+        $message = "Email already exists";
+      }
+      if (str_contains($mysqlErrorMessage, 'username')) {
+        $message = "Username already exists";
+      }
+      response(409, ["message" => $message]);
+    }
     else
-      response(500, $e->getMessage());
+      response(500, ["message", $e->getMessage()]);
   }
 }
 
