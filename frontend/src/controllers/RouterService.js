@@ -21,8 +21,14 @@ class Route {
 
   }
 
+  historyHandle()
+  {
+    history.pushState({}, "", window.location.href);
+  }
+
   async navigate(path)
   {
+    this.historyHandle();
     const callback = await this.selecpath(path);
     await callback.showPage();
   }

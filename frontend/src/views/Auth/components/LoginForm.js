@@ -50,20 +50,16 @@ export default function LoginForm() {
                     required
                     class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 >
+                <p
+                    id="login-password-error"
+                    class="hidden text-xs text-red-500"
+                    aria-live="polite"
+                ></p>
             </div>
-
-            <label class="flex cursor-pointer items-center gap-2 text-sm font-normal text-gray-600">
-                <input
-                    type="checkbox"
-                    name="remember"
-                    class="size-4 rounded border-gray-300 accent-blue-600"
-                >
-                Remember me
-            </label>
 
             <button
                 type="submit"
-                class="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
+                class="w-full rounded-xl mt-6 bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
             >
                 Sign in
             </button>

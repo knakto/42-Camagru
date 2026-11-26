@@ -35,9 +35,71 @@ export default class AuthModel {
     return {validate_ok: true};
   }
 
-  showPasswordError(message){
+  showSignupPasswordError(message){
     const errorBlock = document.querySelector("#signup-password-error");
     errorBlock.textContent = message;
     errorBlock.classList.toggle("hidden", !message);
   }
+
+  showLoginError(message){
+    const errorBlock = document.querySelector("#login-password-error");
+    errorBlock.textContent = message;
+    errorBlock.classList.toggle("hidden", !message);
+  }
+
+  handleTogglePassword(id)
+  {
+    const password = document.querySelector(id);
+
+    password.addEventListener("pointerdown", () => {
+      password.type = "text";
+    });
+
+    password.addEventListener("pointerup", () => {
+      password.type = "password";
+    });
+
+    password.addEventListener("pointerleave", () => {
+      password.type = "password";
+    });
+  }
+
+  showReVerifyError(message){
+    const errorBlock = document.querySelector("#reverify-error");
+    errorBlock.textContent = message;
+    errorBlock.classList.toggle("hidden", !message);
+  }
+  
+  startCooldown(button, key) {
+    const endTime = Number(localStorage.getItem(key)) || 0;
+
+    function update() {
+      const remaining = Math.max(
+        0,
+        Math.ceil((endTime - Date.now()) / 1000)
+      );
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        button.disabled = false;
+        button.textContent = "Resend verification";
+        localStorage.removeItem(key);
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = `Resend (${remaining}s)`;
+    }
+
+    if (endTime <= Date.now()) {
+      button.disabled = false;
+      button.textContent = "Resend verification";
+      return;
+    }
+
+    update();
+
+    const timer = setInterval(update, 1000);
+  }
+
 }

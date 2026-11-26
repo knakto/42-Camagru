@@ -1,4 +1,3 @@
-
 export default function EmailVerificationRequired() {
     return `
       <div id="email-required" class="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl bg-white p-8 font-sans text-center">
@@ -36,10 +35,16 @@ export default function EmailVerificationRequired() {
 
         <button
           type="button"
+          id="reverify"
           class="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
         >
-          Resend verification email
+          Click to send verification
         </button>
+        <p
+            id="reverify-error"
+            class="hidden text-xs text-red-500"
+            aria-live="polite"
+        ></p>
 
         <p class="text-xs font-normal text-gray-400">
           Didn't receive the email? You can request a new verification link.
@@ -59,6 +64,7 @@ export default function EmailVerificationRequired() {
           </svg>
           Back to sign in
         </button>
+
 
       </div>
     `;
