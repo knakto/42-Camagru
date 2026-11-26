@@ -1,4 +1,4 @@
-export default class api {
+class Api {
   constructor(){
     this.url = "http://localhost:8443/api/v1"; 
   }
@@ -27,4 +27,28 @@ export default class api {
     const res = await response.json();
     return res;
   }
+
+  async login({email, password})
+  {
+    try{
+      return await this.post(`/login?DEBUG`, {email:email, password:password});
+    }catch(e)
+    {
+      return e.message;
+    }
+  }
+
+  async register({username, email, password})
+  {
+    try{
+      return await this.post(`/register`, {username:username, email:email, password:password});
+    }catch(e)
+    {
+      return e.message;
+    }
+  }
 }
+
+const api = new Api();
+
+export default api;

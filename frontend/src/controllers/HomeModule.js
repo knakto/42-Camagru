@@ -1,4 +1,4 @@
-import HomePage from "../pages/Home/HomePage.js";
+import HomePage from "../views/Home/HomePage.js";
 
 export default class HomeModule 
 {
@@ -6,8 +6,8 @@ export default class HomeModule
   {
   }
 
-  showPage()
+  async showPage()
   {
-    HomePage();
+    await HomePage();
   }
 }

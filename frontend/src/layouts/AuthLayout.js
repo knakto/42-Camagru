@@ -1,9 +1,9 @@
-export default function AuthLayout(content="") {
+export default function AuthLayout() {
   return `
-  <section id="root" class="w-screen h-screen bg-black flex">
-    <section id="page" class="w-full h-screen bg-white">
+  <section class="w-screen h-screen bg-black flex">
+    <section class="w-full h-screen bg-white">
       <main id="content" class="flex w-full h-full justify-center items-center">
-        ${content}
+
       </main>
     </section>
   </section>
