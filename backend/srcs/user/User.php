@@ -40,15 +40,22 @@ class User {
 
     $res = dbFindUserByEmail($email, ["password", "user_id", "status"]);
     if (!isset($res['password']))
-      response(200, ["status" => "failed"]);
+      response(401, ["message" => "Wrong email or password"]);
     if (!password_verify($password, $res['password']))
-      response(200, ["status" => "failed"]);
+      response(401, ["message" => "Wrong email or password"]);
     if ($res['status'] != 'active')
-      response(200, ["status" => "pending"]);
+    {
+      $_SESSION['email'] = $email;
+      $_SESSION['password'] = $password;
+      session_write_close();
+      response(200, ["message" => "Login succeed but accout status pending", "status" => "pending"]);
+    }
 
+    $_SESSION['email'] = $email;
+    $_SESSION['password'] = $password;
     $_SESSION['user_id'] = $res['user_id'];
     session_write_close();
-    response(200, ["status" => "success"]);
+    response(200, ["message" => "Login success", "status" => "success"]);
   }
 
   /**
@@ -61,7 +68,7 @@ class User {
     $res = dbFindUserByToken($token , ["user_id", "status"],
       ["token_expired_at > :datetime" => ["datetime" => $current_time]]);
     if (empty($res))
-      response(200, ["status" => "failed", "message" => "Token expired."]);
+      response(401, ["status" => "failed", "message" => "Token expired"]);
     dbUpdateUser($res['user_id'], ["status" => "active"]);
     response(200, ["status" => "succeed"]);
   }
@@ -71,8 +78,8 @@ class User {
    * @param $_POST['password']
    */
   public static function resetVerifyToken():void {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = $_SESSION["email"];
+    $password = $_SESSION["password"];
 
     if (!isset($email) || !isset($password))
       response(400);
