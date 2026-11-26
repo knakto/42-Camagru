@@ -87,13 +87,13 @@ class Api {
     }catch(e) { throw e; }
   }
 
-  async register({username, email, password})
+  async register(data)
   {
     try{
-      return await this.post(`/register`, {username:username, email:email, password:password});
+      return await this.post(`/register`, {body: data});
     }catch(e)
     {
-      return e.message;
+      return e;
     }
   }
 

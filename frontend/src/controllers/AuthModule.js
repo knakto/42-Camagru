@@ -107,7 +107,18 @@ export default class AuthModule
         this.model.showSignupPasswordError(validated.message);
       }
 
-      this.model.showForm("login");
+      try{
+        await api.register(formData);
+        this.model.showForm("login");
+      }catch (e)
+      {
+        if (e.message == "Username alrady exists")
+          this.model.showSignupUsernameError("Username already exists");
+        else if (e.message == "Email alreay exists")
+          this.model.showSignupEmailError("Email already exists");
+        else
+          this.model.showSignupUsernameError("Something went wrong");
+      }
     });
   }
 

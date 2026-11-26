@@ -41,6 +41,18 @@ export default class AuthModel {
     errorBlock.classList.toggle("hidden", !message);
   }
 
+  showSignupUsernameError(message){
+    const errorBlock = document.querySelector("#signup-username-error");
+    errorBlock.textContent = message;
+    errorBlock.classList.toggle("hidden", !message);
+  }
+
+  showSignupEmailError(message){
+    const errorBlock = document.querySelector("#signup-email-error");
+    errorBlock.textContent = message;
+    errorBlock.classList.toggle("hidden", !message);
+  }
+
   showLoginError(message){
     const errorBlock = document.querySelector("#login-password-error");
     errorBlock.textContent = message;
