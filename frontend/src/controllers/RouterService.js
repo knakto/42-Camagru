@@ -50,6 +50,6 @@ class Route {
   }
 }
 
-const route = new Route();
+const router = new Route();
 
-export default route;
+export default router;
