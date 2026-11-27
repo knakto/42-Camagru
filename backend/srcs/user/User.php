@@ -28,7 +28,7 @@ class User {
     dbAddUser($username, $email, $password, $token, EXPIRE_TIME);
     $mail = new Verification();
     $mail->sendingVerification($email, $token);
-    response(201);
+    response(201, ["status" => "created", "message" => "Create user success"]);
   }
 
   /**
