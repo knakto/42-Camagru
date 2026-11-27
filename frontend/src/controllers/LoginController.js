@@ -1,6 +1,7 @@
 import LoginModel from "../modeles/LoginModel";
 import views from "../views/IndexViews";
 import services from "../services/IndexServices";
+import controllers from "./IndexControllers";
 
 export default class LoginController
 {
@@ -50,11 +51,13 @@ export default class LoginController
     if (!form)
       return ;
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const status = this.model.login(form);
+      const status = await this.model.login(form);
       if (status === "success")
         services.router.navigate("/home");
+      else if (status === "pending")
+        controllers.email.init();
     });
   }
 }

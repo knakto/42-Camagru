@@ -60,7 +60,7 @@ export default function LoginForm() {
                     Show password
                 </label>
                 <p
-                    id="login-password-error"
+                    id="password-error"
                     class="hidden text-xs text-red-500"
                     aria-live="polite"
                 ></p>
@@ -68,7 +68,7 @@ export default function LoginForm() {
 
             <div class="flex flex-col justify-center items-center">
               <p
-                  id="login-submit-error"
+                  id="submit-error"
                   class="hidden text-xs text-red-500"
                   aria-live="polite"
               ></p>
