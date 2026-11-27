@@ -15,7 +15,7 @@ class Verification
 
   function sendingVerification(string $receiver, string $token):void
   {
-    $verifyUrl = "$this->verifyUrl/auth?verify-token=$token";
+    $verifyUrl = "$this->verifyUrl/verify?verify-token=$token";
     Email::from($this->sender)
       ->to($receiver)
       ->subject("Verify your Camagru email address")
