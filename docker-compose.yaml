@@ -78,6 +78,16 @@ services:
     expose:
       - 8080
 
+  maildotnull:
+    image: maildotnull/maildotnull:latest
+    container_name: maildotnullgru
+    networks:
+      - camagru
+    expose:
+      - 8025
+    ports:
+      - "8025:8025"
+
 networks:
   camagru:
     name: camagru

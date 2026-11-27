@@ -41,7 +41,7 @@ function uuid():string {
   return $uuid;
 }
 
-function dbAddUser(string $username, string $email, string $password, $expire):void
+function dbAddUser(string $username, string $email, string $password,string $token, $expire):void
 {
   try{
     $user_id = uuid();
@@ -52,7 +52,7 @@ function dbAddUser(string $username, string $email, string $password, $expire):v
         "username" => $username,
         "email" => $email,
         "password" => password_hash($password, null),
-        "verify_token" => uuid(),
+        "verify_token" => $token,
         "token_expired_at" => date('Y-m-d H:i:s', strtotime("+$expire minutes"))
       ]
     ];

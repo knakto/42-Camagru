@@ -1,6 +1,7 @@
 <?php declare(strict_types=1); namespace user;
 
 use Exception;
+use email\Verification;
 require_once __DIR__ . "/UserService.php";
 define("EXPIRE_TIME", "3");
 
@@ -23,7 +24,10 @@ class User {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    dbAddUser($username, $email, $password, EXPIRE_TIME);
+    $token = uuid();
+    dbAddUser($username, $email, $password, $token, EXPIRE_TIME);
+    $mail = new Verification();
+    $mail->sendingVerification($email, $token);
     response(201);
   }
 
@@ -68,9 +72,17 @@ class User {
     $res = dbFindUserByToken($token , ["user_id", "status"],
       ["token_expired_at > :datetime" => ["datetime" => $current_time]]);
     if (empty($res))
+    {
+      $res = dbFindUserByToken($token , ["user_id", "status"]);
+      if (!empty($res))
+      {
+        if ($res['status'] == "active")
+          response(200, ["status" => "succeed", "message" => "Already verify"]);
+      }
       response(401, ["status" => "failed", "message" => "Token expired"]);
+    }
     dbUpdateUser($res['user_id'], ["status" => "active"]);
-    response(200, ["status" => "succeed"]);
+    response(200, ["status" => "succeed", "message" => "Verify success"]);
   }
 
   /**
@@ -90,8 +102,11 @@ class User {
     if (!password_verify($password, $res['password']))
       response(200, ["status" => "failed", "password" => $password, "email" => $email, "res" => $res]);
 
+    $token = uuid();
     $expired_time = date('Y-m-d H:i:s', strtotime("+".EXPIRE_TIME." minutes"));
-    dbUpdateUser($res['user_id'], ["verify_token" => uuid(), "token_expired_at" => $expired_time]);
+    dbUpdateUser($res['user_id'], ["verify_token" => $token, "token_expired_at" => $expired_time]);
+    $mail = new Verification();
+    $mail->sendingVerification($email, $token);
     response(200, ["status" => "success"]);
   }
 
