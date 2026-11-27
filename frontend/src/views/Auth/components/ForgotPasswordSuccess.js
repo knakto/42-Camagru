@@ -1,6 +1,6 @@
 export default function ForgotPasswordSuccess() {
     return `
-      <div class="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl bg-white p-8 font-sans text-center">
+      <div id="forgot-success" class="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl bg-white p-8 font-sans text-center">
 
         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
           <svg xmlns="http://www.w3.org/2000/svg"
