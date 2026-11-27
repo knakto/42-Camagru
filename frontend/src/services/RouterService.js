@@ -2,11 +2,12 @@ import controllers from "../controllers/IndexControllers";
 
 export default class Router {
   constructor(){
-    this.defaultPage = controllers.login;
+    this.defaultPage = controllers.error404;
     this.routePath = [
       {path: "/login",      auth:false, callback:controllers.login},
       {path: "/signup",     auth:false, callback:controllers.signup},
       {path: "/forgot",     auth:false, callback:controllers.forgot},
+      {path: "/verify",     auth:false, callback:controllers.email},
       // {path: "/forgot",     auth:false, callback:this.modules.AuthModule},
       // {path: "/home",       auth:false, callback:this.modules.HomeModule},
       // {path: "/user",       auth:false, callback:this.modules.ProfilesModule},

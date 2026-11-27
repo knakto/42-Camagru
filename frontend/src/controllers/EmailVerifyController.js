@@ -9,13 +9,40 @@ export default class EmailVeriftController
     this.model = new VerifyModel();
     this.clickCallback = {
       login: () => { services.router.navigate("/login")},
-      resend: this.model.resend,
+      resend: this.model.resend.bind(this.model),
     };
   }
 
   init()
   {
-    this.initVerifyRequire();
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has('verify-token'))
+    {
+      (async () => {
+        const status = await this.model.verify(params.get('verify-token'))
+        if (status === "success")
+          this.initVerifySuccess();
+        else if (status === "expired")
+          this.initVerifyExpire();
+        else
+          services.router.navigate('/login');
+      })();
+    }
+    else
+      this.initVerifyRequire();
+  }
+
+  initVerifySuccess()
+  {
+    views.setupView("verifySuccess");
+    this.eventHandler("click", this.clickCallback, "#email-verified")
+  }
+
+  initVerifyExpire()
+  {
+    views.setupView("verifyExpire");
+    this.eventHandler("click", this.clickCallback, "#email-expired")
   }
 
   initVerifyRequire()

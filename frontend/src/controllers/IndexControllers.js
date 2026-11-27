@@ -2,6 +2,7 @@ import LoginController from "./LoginController"
 import SignupController from "./SignupController"
 import EmailVeriftController from "./EmailVerifyController"
 import ForgotController from "./ForgotController";
+import { Error404 } from "./ErrorController";
 
 class IndexControllers
 {
@@ -11,6 +12,7 @@ class IndexControllers
     this.signup = new SignupController();
     this.email = new EmailVeriftController();
     this.forgot = new ForgotController();
+    this.error404 = new Error404();
   }
 }
 

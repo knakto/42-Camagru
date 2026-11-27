@@ -35,6 +35,8 @@ export default function EmailVerificationExpired() {
 
         <button
           type="button"
+          id="reverify"
+          data-target="resend"
           class="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
         >
           Request new verification link

@@ -15,7 +15,7 @@ export default class LoginController
     };
 
     this.changeCallback = {
-      showPassword: this.model.togglePassword,
+      showPassword: this.model.togglePassword.bind(this.model),
     }
   }
 
