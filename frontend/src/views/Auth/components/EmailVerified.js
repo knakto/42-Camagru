@@ -25,7 +25,7 @@ export default function EmailVerified() {
 
         <button
           type="button"
-          data-auth-view="login"
+          data-target="login"
           class="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
         >
           Go to sign in

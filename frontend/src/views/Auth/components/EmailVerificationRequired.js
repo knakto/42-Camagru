@@ -52,7 +52,7 @@ export default function EmailVerificationRequired() {
 
         <button
           type="button"
-          data-auth-view="login"
+          data-target="login"
           class="flex items-center gap-2 text-sm font-semibold text-gray-600 transition hover:text-blue-600"
         >
           <svg xmlns="http://www.w3.org/2000/svg"

@@ -34,7 +34,7 @@ export default function LoginForm() {
                     </label>
                     <button
                         type="button"
-                        data-auth-view="forgot"
+                        data-target="forgotPassword"
                         class="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
                     >
                         Forgot password?
@@ -53,7 +53,7 @@ export default function LoginForm() {
                 <label class="flex cursor-pointer items-center gap-2 text-xs text-gray-500">
                     <input
                         type="checkbox"
-                        id="login-show-password"
+                        data-target="showPassword"
                         class="h-4 w-4 rounded border-gray-300 accent-blue-600"
                     >
                     Show password
@@ -83,7 +83,7 @@ export default function LoginForm() {
                 Don't have an account?
                 <button
                     type="button"
-                    data-auth-view="signup"
+                    data-target="signup"
                     class="font-semibold text-blue-600 transition-colors hover:text-blue-700"
                 >
                     Sign up

@@ -109,7 +109,7 @@ export default function SignupForm() {
             Already have an account?
             <button
                 type="button"
-                data-auth-view="login"
+                data-target="login"
                 class="font-semibold text-blue-600 transition-colors hover:text-blue-700"
             >
                 Sign in
