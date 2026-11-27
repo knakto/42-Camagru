@@ -91,12 +91,19 @@ export default function SignupForm() {
             ></p>
         </div>
 
-        <button
-            type="submit"
-            class="mt-5 w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
-        >
-            Create account
-        </button>
+        <div class="flex flex-col justify-center items-center">
+          <p
+              id="signup-submit-error"
+              class="hidden text-xs text-red-500"
+              aria-live="polite"
+          ></p>
+          <button
+              type="submit"
+              class="mt-5 w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
+          >
+              Create account
+          </button>
+        </div>
 
         <p class="text-center text-sm font-normal text-gray-500">
             Already have an account?

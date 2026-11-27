@@ -1,64 +1,61 @@
-import AuthModel from "../modeles/AuthModel.js";
+//#####################################################
+// AuthModule(Controller)
+//=====================================================
+// showPage():  entrypoint of page, show Html Css and
+//              call handle binding eventHandler
+// handleBasicEvent():  binding switchAuth handler,
+//                      verification when have query,
+//                      resend verification token
+// handleLoginForm(): handle all event of Login Form
+//
+//#####################################################
+
+import {AuthModel, LoginModel, SignupModel, EmailVerification} from "../modeles/AuthModel.js";
 import AuthPage from "../views/Auth/AuthPage.js";
-import api from "./ApiService.js";
 import router from "./RouterService.js";
 
 export default class AuthModule
 {
-  constructor() { this.model = new AuthModel(); }
+  constructor() {
+    this.models = {
+      auth: new AuthModel(),
+      login: new LoginModel(),
+      signup: new SignupModel(),
+      email: new EmailVerification(),
+    }
+  }
 
   async showPage()
   {
     await AuthPage();
+    await this.handleBasicEvent();
     await this.handleLoginForm();
-    await this.handleSignupSubmit();
-    await this.handleResendVerification();
-    await this.switchAuthForm();
+    await this.handleSignupForm();
+    await this.handleForgotForm();
+  }
+
+  async handleBasicEvent()
+  {
+    const authModel = this.models.auth;
+    await authModel.switchAuthForm();
     await this.handleVerifyEmail();
-  }
-
-  async handleVerifyEmail()
-  {
-    const params = new URLSearchParams(window.location.search);
-    if (params.has("verify-token"))
-    {
-      const token = params.get("verify-token");
-      try{
-        await api.verifyEmail(token);
-        this.model.showForm("emailVerified");
-      }catch(e)
-      {
-        if (e.message == "Token expired")
-          this.model.showForm("emailExpired");
-        else
-        {
-          this.model.showForm("login");
-        }
-      }
-    }
-  }
-
-  /**
-   * This function call for change Authmethod like Forgot, Login, and Signin
-   * this hidden 3 Authmethod that can come from queryUrl only.
-   */
-  async switchAuthForm()
-  {
-    const viewport = document.querySelector("#authViewport");
-    viewport.addEventListener("click", (event) => {
-      const target = event.target.closest("[data-auth-view]");
-
-      if (!target) return;
-
-      event.preventDefault();
-      this.model.showForm(target.dataset.authView);
-    });
+    await this.handleResendVerification();
   }
 
   async handleLoginForm()
   {
+    const loginModel = this.models.login;
     await this.handleLoginSubmit();
-    this.model.handleTogglePassword("#login-password");
+    loginModel.handleTogglePassword();
+  }
+
+  async handleSignupForm()
+  {
+    await this.handleSignupSubmit();
+  }
+
+  async handleForgotForm()
+  {
   }
 
   /**
@@ -71,20 +68,11 @@ export default class AuthModule
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      let res;
-      try{
-        res = await api.login(new FormData(form));
-        if (res.status == "pending")
-          this.model.showForm("emailRequired");
-        else if (res.status == "success")
-          router.navigate("/home");
-      }catch(e)
-      {
-        if (e.message == "Wrong email or password")
-          this.model.showLoginError("The email or password you've entered is incorrect.");
-        else
-          this.model.showLoginError("Something went wrong.");
-      }
+    const status = await this.models.login.tryLogin(form);
+    if (status === "pending")
+        this.models.auth.showForm("emailRequired");
+    else if (status === "success")
+        router.navigate("/home");
     });
   }
 
@@ -99,52 +87,37 @@ export default class AuthModule
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const formData = new FormData(form);
-      
-      const validated = this.model.validatePassword(formData.get("password"), formData.get("confirm_password"));
-
-      if (validated.validate_ok == false){
-        this.model.showSignupPasswordError(validated.message);
-      }
-
-      try{
-        await api.register(formData);
-        this.model.showForm("login");
-      }catch (e)
-      {
-        if (e.message == "Username alrady exists")
-          this.model.showSignupUsernameError("Username already exists");
-        else if (e.message == "Email alreay exists")
-          this.model.showSignupEmailError("Email already exists");
-        else
-          this.model.showSignupUsernameError("Something went wrong");
-      }
+      if (!this.models.signup.validatePassword(form))
+        return
+      const status = await this.models.signup.trySignup(form);
+      if (status == "success")
+        this.models.auth.showForm("emailRequired");
     });
   }
 
   async handleResendVerification() {
     const resendButton = document.querySelector("#reverify");
-    const COOLDOWN = 60 * 1000;
     resendButton.addEventListener("click", async (event) => {
       event.preventDefault();
 
-      try {
-        await api.resendVerification();
-
-        localStorage.setItem(
-          "verification-cooldown",
-          Date.now() + COOLDOWN
-        );
-
-        this.model.startCooldown(
-          resendButton,
-          "verification-cooldown"
-        );
-      } catch (e) {
-        this.model.showReVerifyError("Something went wrong.");
-      }
+      this.models.email.tryResetToken();
     });
   }
 
+  async handleVerifyEmail()
+  {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("verify-token"))
+    {
+      const token = params.get("verify-token");
+      const status = await this.models.email.tryVerifyToken(token);
+      if (status === "success")
+        this.models.auth.showForm("emailVerified");
+      else if (status === "expired")
+        this.models.auth.showForm("emailExpired");
+      else
+        this.models.auth.showForm("login");
+    }
+  }
 }
 

@@ -1,4 +1,6 @@
-export default class AuthModel {
+import api from "../controllers/ApiService.js";
+
+export class AuthModel {
   showForm(formType){
     const positions = {
       forgot: "translate-x-0",
@@ -14,7 +16,90 @@ export default class AuthModel {
     track.className = ` flex w-[700%] ${positions[formType]} `;
   }
 
-  validatePassword(password, cmfpassword)
+  /**
+   * This function call for change Authmethod like Forgot, Login, and Signin
+   * this hidden 3 Authmethod that can come from queryUrl only.
+   */
+  async switchAuthForm()
+  {
+    const viewport = document.querySelector("#authViewport");
+    viewport.addEventListener("click", (event) => {
+      const target = event.target.closest("[data-auth-view]");
+
+      if (!target) return;
+
+      event.preventDefault();
+      this.showForm(target.dataset.authView);
+    });
+  }
+}
+
+export class LoginModel
+{
+
+  async tryLogin(form)
+  {
+    let res;
+    try{
+      res = await api.login(new FormData(form));
+      if (res.status == "pending")
+        return "pending";
+      else if (res.status == "success")
+        return "success";
+    }catch(e)
+    {
+      if (e.message == "Wrong email or password")
+        this.showError("password","The email or password you've entered is incorrect.");
+      else
+        this.showError("submit","Something went wrong.");
+    }
+  }
+
+  showError(on, message){
+    const target = {
+      password: "#login-password-error",
+      submit: "#login-submit-error",
+    }
+    const errorBlock = document.querySelector(target[on]);
+    errorBlock.textContent = message;
+    errorBlock.classList.toggle("hidden", !message);
+    if (on == "submit")
+      this.showError("password", "");
+  }
+
+  handleTogglePassword()
+  {
+    const password = document.querySelector("#login-password");
+    const checkbox = document.querySelector("#login-show-password");
+    checkbox?.addEventListener("change", () => {
+        password.type = checkbox.checked ? "text" : "password";
+    });
+  }
+
+}
+
+export class SignupModel
+{
+  async trySignup(form)
+  {
+    try{
+      const formData = new FormData(form);
+      console.log(formData);
+      await api.register(formData);
+      return "success";
+    }catch (e)
+    {
+      if (e.message == "Username alrady exists")
+        this.showError("username", "Username already exists");
+      else if (e.message == "Email alreay exists")
+        this.showError("email", "Email already exists");
+      else
+        this.showError("submit", "Something went wrong");
+      return "failed";
+    }
+  }
+
+  checkFormatPassword(password, cmfpassword)
   {
     const passwordRules = [
       {test: /[a-z]/, message: "Must contain at least one lowercase letter"},
@@ -35,47 +120,46 @@ export default class AuthModel {
     return {validate_ok: true};
   }
 
-  showSignupPasswordError(message){
-    const errorBlock = document.querySelector("#signup-password-error");
-    errorBlock.textContent = message;
-    errorBlock.classList.toggle("hidden", !message);
-  }
-
-  showSignupUsernameError(message){
-    const errorBlock = document.querySelector("#signup-username-error");
-    errorBlock.textContent = message;
-    errorBlock.classList.toggle("hidden", !message);
-  }
-
-  showSignupEmailError(message){
-    const errorBlock = document.querySelector("#signup-email-error");
-    errorBlock.textContent = message;
-    errorBlock.classList.toggle("hidden", !message);
-  }
-
-  showLoginError(message){
-    const errorBlock = document.querySelector("#login-password-error");
-    errorBlock.textContent = message;
-    errorBlock.classList.toggle("hidden", !message);
-  }
-
-  handleTogglePassword(id)
+  validatePassword(form)
   {
-    const password = document.querySelector(id);
+    const formData = new FormData(form);
 
-    password.addEventListener("pointerdown", () => {
-      password.type = "text";
-    });
+    const validated = this.checkFormatPassword(
+      formData.get("password"),
+      formData.get("confirm_password"));
 
-    password.addEventListener("pointerup", () => {
-      password.type = "password";
-    });
-
-    password.addEventListener("pointerleave", () => {
-      password.type = "password";
-    });
+    if (validated.validate_ok == false){
+      this.showError("password", validated.message);
+      return false
+    }
+    return true
   }
 
+  showError(on, message){
+    const target = {
+      username: "#signup-username-error",
+      email: "#signup-email-error",
+      password: "#signup-password-error",
+      submit: "#signup-submit-error",
+    };
+    const errorBlock = document.querySelector(target[on]);
+    errorBlock.textContent = message;
+    errorBlock.classList.toggle("hidden", !message);
+    if (on == "submit")
+    {
+      this.showError("username", "");
+      this.showError("email", "");
+      this.showError("password", "");
+    }
+  }
+}
+
+export class ForgotModel
+{
+}
+
+export class EmailVerification
+{
   showReVerifyError(message){
     const errorBlock = document.querySelector("#reverify-error");
     errorBlock.textContent = message;
@@ -87,7 +171,7 @@ export default class AuthModel {
 
     function update() {
       const remaining = Math.max(
-        0,
+        
         Math.ceil((endTime - Date.now()) / 1000)
       );
 
@@ -114,4 +198,37 @@ export default class AuthModel {
     const timer = setInterval(update, 1000);
   }
 
+  async tryResetToken()
+  {
+    try {
+      const COOLDOWN = 60 * 1000;
+      await api.resendVerification();
+
+      localStorage.setItem(
+        "verification-cooldown",
+        Date.now() + COOLDOWN
+      );
+
+      this.startCooldown(
+        resendButton,
+        "verification-cooldown"
+      );
+    } catch (e) {
+      this.showReVerifyError("Something went wrong.");
+    }
+  }
+
+  async tryVerifyToken(token)
+  {
+    try{
+      await api.verifyEmail(token);
+      return "success";
+    }catch(e)
+    {
+      if (e.message == "Token expired")
+        return "expired";
+      else
+        return "error";
+    }
+  }
 }
