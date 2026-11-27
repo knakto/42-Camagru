@@ -44,9 +44,9 @@ export default class SignupController
     if (!form)
       return ;
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const status = this.model.signup(form);
+      const status = await this.model.signup(form);
       if (status === "success")
         controllers.email.init();
     });

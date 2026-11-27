@@ -61,7 +61,6 @@ export default class Api {
       throw new ApiError("Invalid server response", response.status);
     }
 
-
     if (!response.ok) {
       throw new ApiError(
         data.message || "request failed.",

@@ -27,7 +27,7 @@ export default function SignupForm() {
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
             <p
-                id="signup-username-error"
+                id="username-error"
                 class="hidden text-xs text-red-500"
                 aria-live="polite"
             ></p>
@@ -47,7 +47,7 @@ export default function SignupForm() {
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
             <p
-                id="signup-email-error"
+                id="email-error"
                 class="hidden text-xs text-red-500"
                 aria-live="polite"
             ></p>
@@ -85,7 +85,7 @@ export default function SignupForm() {
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
             <p
-                id="signup-password-error"
+                id="password-error"
                 class="hidden text-xs text-red-500"
                 aria-live="polite"
             ></p>
@@ -93,7 +93,7 @@ export default function SignupForm() {
 
         <div class="flex flex-col justify-center items-center">
           <p
-              id="signup-submit-error"
+              id="submit-error"
               class="hidden text-xs text-red-500"
               aria-live="polite"
           ></p>
