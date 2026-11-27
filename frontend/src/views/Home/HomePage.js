@@ -210,10 +210,10 @@ export async function HomePage() {
   const sidebar = document.querySelector("#sidebar");
   const nav = document.querySelector("#navbar");
 
-  // content.innerHTML = CreatePost();
-  // CreatePostEventBinding();
-  //
-  content.innerHTML = Content();
+  content.innerHTML = CreatePost();
+  CreatePostEventBinding();
+
+  // content.innerHTML = Content();
 
   sidebar.innerHTML = Sidebar();
   nav.innerHTML = Navbar();

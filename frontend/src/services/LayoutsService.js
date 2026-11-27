@@ -1,7 +1,7 @@
 import AuthLayout from "../layouts/AuthLayout";
 import MainLayout from "../layouts/MainLayout";
 
-class LayoutModule {
+export default class Layout{
   constructor()
   {
     this.layouts = [
@@ -35,7 +35,3 @@ class LayoutModule {
     
   }
 }
-
-const layouts = new LayoutModule();
-
-export default layouts;

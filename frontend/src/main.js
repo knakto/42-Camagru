@@ -1,4 +1,4 @@
-import router from "./controllers/RouterService";
+import services from "./services/IndexServices.js";
 import "./style.css";
 
-router.navigate(window.location.pathname);
+services.router.navigate(window.location.pathname + window.localStorage.search + window.localStorage.hash);

@@ -7,7 +7,7 @@ class ApiError extends Error {
     }
 }
 
-class Api {
+export default class Api {
   constructor(){
     this.url = "http://localhost:8443/api/v1"; 
   }
@@ -91,10 +91,7 @@ class Api {
   {
     try{
       return await this.post(`/register`, {body: data});
-    }catch(e)
-    {
-      return e;
-    }
+    }catch(e) { throw e; }
   }
 
   async verifyEmail(data)
@@ -105,7 +102,3 @@ class Api {
     }catch(e) { throw e; }
   }
 }
-
-const api = new Api();
-
-export default api;
