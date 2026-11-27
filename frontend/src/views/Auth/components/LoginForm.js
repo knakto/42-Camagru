@@ -43,7 +43,7 @@ export default function LoginForm() {
 
                 <input
                     type="password"
-                    id="login-password"
+                    id="password"
                     name="password"
                     placeholder="Enter your password"
                     autocomplete="current-password"
@@ -53,6 +53,7 @@ export default function LoginForm() {
                 <label class="flex cursor-pointer items-center gap-2 text-xs text-gray-500">
                     <input
                         type="checkbox"
+                        id="show-password"
                         data-target="showPassword"
                         class="h-4 w-4 rounded border-gray-300 accent-blue-600"
                     >
