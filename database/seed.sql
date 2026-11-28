@@ -20,13 +20,13 @@ FROM seq;
 
 -- Insert parent table
 INSERT INTO users (
-    user_id, username, email, password, status, verify_token, token_expired_at
+    user_id, username, email, password, status, verify_token, verify_expired_at
 )
 SELECT
     user_id,
     username,
     email,
-    '$2y$12$hRukrcv14QS2Y/ojN3Iw8OkMqVrCR4gZkfOi64WZlJlRN7m9Znplu',
+    '$2y$12$6MYOf1q.lhghqfQum85i0egY9iDeTHHtlXTKvzlOQpHFKkWhgFpCu',
     'active',
     UUID(),
     CURRENT_TIMESTAMP

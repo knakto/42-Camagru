@@ -6,7 +6,9 @@ CREATE TABLE `users`(
   `password`          VARCHAR(255)              NOT NULL,
   `status`            ENUM("active", "pending") NOT NULL DEFAULT "pending",
   `verify_token`      CHAR(36)                  NOT NULL UNIQUE,
-  `token_expired_at`  TIMESTAMP                 NOT NULL,
+  `verify_expired_at` TIMESTAMP                 NOT NULL,
+  `reset_token`       CHAR(36)                  NULL,
+  `reset_expired_at`  TIMESTAMP                 NULL,
   `created_at`        TIMESTAMP                 NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`        TIMESTAMP                 NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
