@@ -31,6 +31,9 @@ class Route {
     "/reset-token"  => [self::POST, false, User::class , "resetVerifyToken"],
     "/user"         => [self::GET , false, User::class , "getSelf"],
     "/user/{name}"  => [self::GET , false, User::class , "getUser"],
+    "/reset-request"=> [self::POST, false, User::class , "resetRequest"],
+    "/reset-expire" => [self::POST, false, User::class , "resetExpireCheck"],
+    "/reset"        => [self::POST, false, User::class , "resetPassword"],
   ];
 
   private function getPrefixUrl(): string
