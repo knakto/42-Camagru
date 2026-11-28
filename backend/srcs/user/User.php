@@ -1,7 +1,6 @@
 <?php declare(strict_types=1); namespace user;
 
-use Exception;
-use email\Verification;
+use email\SendMail;
 require_once __DIR__ . "/UserService.php";
 define("EXPIRE_TIME", "3");
 
@@ -18,7 +17,7 @@ class User {
    */
   public static function register():void {
     if (!isset($_POST['username']) || !isset($_POST['email']) || !isset($_POST['password']))
-      response(400);
+      response(400, ["status" => "failed", "error" => "Bad request"]);
 
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -26,7 +25,7 @@ class User {
 
     $token = uuid();
     dbAddUser($username, $email, $password, $token, EXPIRE_TIME);
-    $mail = new Verification();
+    $mail = new SendMail();
     $mail->sendingVerification($email, $token);
     response(201, ["status" => "created", "message" => "Create user success"]);
   }
@@ -40,7 +39,7 @@ class User {
     $password = $_POST['password'];
 
     if (!isset($email) || !isset($password))
-      response(400);
+      response(400, ["status" => "failed", "error" => "Bad request"]);
 
     $res = dbFindUserByEmail($email, ["password", "user_id", "status"]);
     if (!isset($res['password']))
@@ -69,11 +68,11 @@ class User {
     $token = $_GET['verify_token'] ?? "";
     $current_time = date('Y-m-d H:i:s');
 
-    $res = dbFindUserByToken($token , ["user_id", "status"],
-      ["token_expired_at > :datetime" => ["datetime" => $current_time]]);
+    $res = dbFindUserByToken($token, "verify", ["user_id", "status"],
+      ["verify_expired_at > :datetime" => ["datetime" => $current_time]]);
     if (empty($res))
     {
-      $res = dbFindUserByToken($token , ["user_id", "status"]);
+      $res = dbFindUserByToken($token, "verify", ["user_id", "status"]);
       if (!empty($res))
       {
         if ($res['status'] == "active")
@@ -94,7 +93,7 @@ class User {
     $password = $_SESSION["password"];
 
     if (!isset($email) || !isset($password))
-      response(400);
+      response(400, ["status" => "failed", "error" => "Bad request"]);
 
     $res = dbFindUserByEmail($email, ["password", "user_id"]);
     if (!isset($res['password']))
@@ -105,7 +104,7 @@ class User {
     $token = uuid();
     $expired_time = date('Y-m-d H:i:s', strtotime("+".EXPIRE_TIME." minutes"));
     dbUpdateUser($res['user_id'], ["verify_token" => $token, "token_expired_at" => $expired_time]);
-    $mail = new Verification();
+    $mail = new SendMail();
     $mail->sendingVerification($email, $token);
     response(200, ["status" => "success"]);
   }
@@ -126,19 +125,81 @@ class User {
     $user_id = $_SESSION['user_id'] ?? "";
     $res = dbFindUserById($user_id, $fields, $where, $join);
     if (empty($res))
-      response(404);
+      response(404, ["status" => "failed", "message" => "Not found"]);
     response(200, ["status" => "success", "data" => $res]);
   }
 
   public static function getUser(string $username = ""):void
   {
     if (empty($username))
-      response(400);
+      response(400, ["status" => "failed", "error" => "Bad request"]);
     $fields = ["username"];
     $where = ["status = :status" => ["status" => 'active']];
     $res = dbFindUserByName($username, $fields, $where);
     if (empty($res))
-      response(404);
+      response(400, ["status" => "failed", "error" => "Bad request"]);
     response(200, ["status" => "success", "data" => $res]);
+  }
+
+  public static function resetRequest():void
+  {
+    if (!isset($_POST['email']))
+      response(400, ["status" => "failed", "error" => "Bad request"]);
+
+    $email = $_POST["email"];
+    $res = dbFindUserByEmail($email, ["user_id"]);
+    if (empty($res))
+      response(404, ["status" => "failed", "message" => "Not found"]);
+
+    $token = uuid();
+    $expired_time = date('Y-m-d H:i:s', strtotime("+".EXPIRE_TIME." minutes"));
+    $res = dbUpdateUser($res['user_id'], ["reset_token" => $token, "reset_expired_at" => $expired_time]);
+    $mail = new SendMail();
+    $mail->sendingResetPassword($email, $token);
+    response(200, ["status" => "success", "message" => "Sending request password token"]);
+  }
+
+  public static function resetPassword():void
+  {
+    if (!isset($_POST['reset_token']) || !isset($_POST['new_password']))
+      response(400, ["status" => "failed", "error" => "Bad request"]);
+
+    $token = $_POST['reset_token'];
+    $password = $_POST['new_password'];
+    $current_time = date('Y-m-d H:i:s');
+
+    $res = dbFindUserByToken($token, "reset", ["user_id"],
+      ["reset_expired_at > :datetime" => ["datetime" => $current_time]]);
+    if (empty($res))
+    {
+      $check = dbFindUserByToken($token, "reset", ["user_id"]);
+      if (empty($check))
+        response(404, ["status" => "failed", "message" => "User not found"]);
+      response(401, ["status" => "failed", "message" => "Token expired"]);
+    }
+
+
+    dbUpdateUser($res['user_id'], ["password" => password_hash($password, PASSWORD_DEFAULT), "reset_token" => uuid()]);
+    response(200, ["status" => "success", "message" => "Reset password success"]);
+  }
+
+  public static function resetExpireCheck():void
+  {
+    if (!isset($_POST['reset_token']))
+      response(400, ["status" => "failed", "error" => "Bad request"]);
+
+    $token = $_POST['reset_token'];
+    $current_time = date('Y-m-d H:i:s');
+
+    $res = dbFindUserByToken($token, "reset", ["user_id"],
+      ["reset_expired_at > :datetime" => ["datetime" => $current_time]]);
+    if (empty($res))
+    {
+      $check = dbFindUserByToken($token, "reset", ["user_id"]);
+      if (empty($check))
+        response(404, ["status" => "failed", "message" => "User not found"]);
+      response(401, ["status" => "failed", "message" => "Token expired"]);
+    }
+    response(200, ["status" => "success", "message" => "Token still usable"]);
   }
 }

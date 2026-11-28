@@ -51,9 +51,9 @@ function dbAddUser(string $username, string $email, string $password,string $tok
         "user_id" => $user_id,
         "username" => $username,
         "email" => $email,
-        "password" => password_hash($password, null),
+        "password" => password_hash($password, PASSWORD_DEFAULT),
         "verify_token" => $token,
-        "token_expired_at" => date('Y-m-d H:i:s', strtotime("+$expire minutes"))
+        "verify_expired_at" => date('Y-m-d H:i:s', strtotime("+$expire minutes"))
       ]
     ];
     Query::insert($query);
@@ -101,12 +101,17 @@ function dbFindUserByEmail(string $email, array $fields): array
 }
 
 //["user_id", "token_expired_at"],
-function dbFindUserByToken(string $token, array $fields, array $where = []): array
+function dbFindUserByToken(string $token, $type, array $fields, array $where = []): array
 {
-  if (empty($where) || !is_string(array_key_first($where)))
-    $where = [ "verify_token = :token" => ["token" => $token]];
+  $token_type = "";
+  if ($type == "verify")
+    $token_type = "verify_token";
   else
-    $where = [ "verify_token = :token and ".array_key_first($where) => ["token" => $token] + array_first($where)];
+    $token_type = "reset_token";
+  if (empty($where) || !is_string(array_key_first($where)))
+    $where = [ "$token_type = :token" => ["token" => $token]];
+  else
+    $where = [ "$token_type = :token and ".array_key_first($where) => ["token" => $token] + array_first($where)];
   try{
     $query = [
       "table" => "users",
