@@ -7,6 +7,9 @@ import EmailVerificationRequired from "./components/EmailVerificationRequired";
 import EmailVerificationExpired from "./components/EmailVerificationExpired";
 import EmailVerified from "./components/EmailVerified";
 import ForgotPasswordSuccess from "./components/ForgotPasswordSuccess";
+import ResetPasswordForm from "./components/ResetPasswordForm";
+import ResetPasswordSuccess from "./components/ResetPasswordSuccess";
+import ResetExpired from "./components/ResetExpired";
 
 export default class AuthView
 {
@@ -38,6 +41,18 @@ export default class AuthView
     document.querySelector("#authViewport").innerHTML = ForgotPasswordForm();
   }
 
+  reset()
+  {
+    this.templateAuthView();
+    document.querySelector("#authViewport").innerHTML = ResetPasswordForm();
+  }
+
+  resetSuccess()
+  {
+    this.templateAuthView();
+    document.querySelector("#authViewport").innerHTML = ResetPasswordSuccess();
+  }
+
   verifyRequire()
   {
     this.templateAuthView();
@@ -61,4 +76,11 @@ export default class AuthView
     this.templateAuthView();
     document.querySelector("#authViewport").innerHTML = ForgotPasswordSuccess();
   }
+
+  resetExpired()
+  {
+    this.templateAuthView();
+    document.querySelector("#authViewport").innerHTML = ResetExpired();
+  }
+
 }

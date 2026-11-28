@@ -14,6 +14,59 @@ export default class ForgotController
 
   init()
   {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has('reset-token'))
+    {
+      (async () => {
+        const status = await this.model.resetTokenCheck(params.get('reset-token'));
+        if (status === "success")
+          this.initResetPassword(params.get('reset-token'));
+      })();
+      this.initResetExpired();
+    }
+    else
+      this.initForgotPassword();
+  }
+
+  initResetSuccess()
+  {
+    views.setupView("resetSuccess");
+    this.eventHandler("click", this.clickCallback, "#reset-success");
+  }
+
+  initResetExpired()
+  {
+    views.setupView("resetExpired");
+    this.eventHandler("click", this.clickCallback, "#reset-expired");
+  }
+
+  initResetPassword(token)
+  {
+    views.setupView("reset");
+    this.eventHandler("click", this.clickCallback, "#reset-password-form");
+    this.resetSubmitHandler(token);
+  }
+
+  resetSubmitHandler(token)
+  {
+    const form = document.querySelector("#reset-password-form");
+    if (!form)
+      return ;
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const status = await this.model.reset(form, token);
+      if (status === "success")
+        this.initResetSuccess();
+      else if (status === "Token expired")
+        this.initResetExpired();
+    });
+  }
+
+  initForgotPassword()
+  {
     views.setupView("forgot");
     this.eventHandler("click", this.clickCallback, "#forgot-password-form");
     this.forgotHandler();
@@ -51,9 +104,8 @@ export default class ForgotController
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      const status = this.model.forgot(form);
-      if (status === "success")
-        this.forgetPasswordSuccess();
+      this.model.forgot(form);
+      this.forgetPasswordSuccess();
     });
   }
 }

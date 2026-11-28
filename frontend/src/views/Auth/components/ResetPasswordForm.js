@@ -20,7 +20,7 @@ export default function ResetPasswordForm() {
             <input
                 type="password"
                 id="new-password"
-                name="password"
+                name="new_password"
                 placeholder="Enter your new password"
                 autocomplete="new-password"
                 minlength="8"
@@ -61,7 +61,7 @@ export default function ResetPasswordForm() {
 
             <button
                 type="button"
-                data-auth-view="login"
+                data-target="login"
                 class="font-semibold text-blue-600 transition-colors hover:text-blue-700"
             >
                 Sign in

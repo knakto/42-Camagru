@@ -100,4 +100,25 @@ export default class Api {
       await this.get(`/verify-token?${params}`);
     }catch(e) { throw e; }
   }
+
+  async resetRequest(data)
+  {
+    try{
+      return await this.post(`/reset-request`, {body: data});
+    }catch(e) { throw e; }
+  }
+
+  async resetTokenCheck(data)
+  {
+    try{
+      return await this.post(`/reset-expire`, {body: data});
+    }catch(e) { throw e; }
+  }
+
+  async resetPassword(data)
+  {
+    try{
+      return await this.post(`/reset`, {body: data});
+    }catch(e) { throw e; }
+  }
 }
