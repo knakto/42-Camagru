@@ -47,6 +47,11 @@ export default function ResetPasswordForm() {
                 required
                 class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
+            <p
+                id="password-error"
+                class="hidden text-xs text-red-500"
+                aria-live="polite"
+            ></p>
         </div>
 
         <button
