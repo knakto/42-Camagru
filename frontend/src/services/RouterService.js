@@ -8,6 +8,8 @@ export default class Router {
       {path: "/signup",     auth:false, callback:controllers.signup},
       {path: "/forgot",     auth:false, callback:controllers.forgot},
       {path: "/verify",     auth:false, callback:controllers.email},
+
+      {path: "/home",       auth:true, callback:controllers.home},
       // {path: "/forgot",     auth:false, callback:this.modules.AuthModule},
       // {path: "/home",       auth:false, callback:this.modules.HomeModule},
       // {path: "/user",       auth:false, callback:this.modules.ProfilesModule},

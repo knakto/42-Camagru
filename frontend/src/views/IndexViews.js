@@ -1,5 +1,6 @@
 import AuthView from "./Auth/AuthView"
 import ErrorView from "./Error/ErrorView";
+import HomeView from "./Home/HomeView";
 
 class IndexViews
 {
@@ -7,10 +8,13 @@ class IndexViews
   {
     this.viewsParent = {
       auth: new AuthView(),
+      home: new HomeView(),
       err: new ErrorView(),
     }
 
     this.targetView = {
+      error404: this.viewsParent.err.error404.bind(this.viewsParent.err),
+
       login: this.viewsParent.auth.login.bind(this.viewsParent.auth),
       signup: this.viewsParent.auth.signup.bind(this.viewsParent.auth),
       forgot: this.viewsParent.auth.forgot.bind(this.viewsParent.auth),
@@ -21,7 +25,8 @@ class IndexViews
       verifyRequire: this.viewsParent.auth.verifyRequire.bind(this.viewsParent.auth),
       verifySuccess: this.viewsParent.auth.verifySuccess.bind(this.viewsParent.auth),
       verifyExpire: this.viewsParent.auth.verifyExpire.bind(this.viewsParent.auth),
-      error404: this.viewsParent.err.error404.bind(this.viewsParent.err),
+
+      home: this.viewsParent.home.home.bind(this.viewsParent.home),
     }
   }
 

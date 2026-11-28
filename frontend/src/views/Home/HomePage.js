@@ -1,7 +1,5 @@
-import layouts from "../../controllers/LayoutsService.js";
 
-
-function Sidebar(){
+export function Sidebar(){
   return `
     <aside class="w-full h-full bg-white flex flex-col p-6">
 
@@ -65,7 +63,7 @@ function Sidebar(){
 
 
 
-function Navbar(){
+export function Navbar(){
   return `
     <nav class="w-full h-full bg-white px-6 md:px-10 flex items-center justify-between">
 
@@ -102,7 +100,7 @@ function Navbar(){
 }
 
 
-function Content(){
+export function Content(){
   return `
     <section class="w-full min-h-full bg-gray-50 px-5 md:px-10 py-8">
 
