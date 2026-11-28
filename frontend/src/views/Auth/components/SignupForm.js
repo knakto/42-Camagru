@@ -59,7 +59,7 @@ export default function SignupForm() {
             </label>
             <input
                 type="password"
-                id="signup-password"
+                id="password"
                 name="password"
                 placeholder="Create a password"
                 autocomplete="new-password"
@@ -77,8 +77,8 @@ export default function SignupForm() {
             </label>
             <input
                 type="password"
-                id="signup-confirm-password"
-                name="confirm_password"
+                id="confirm-password"
+                name="confirm-password"
                 placeholder="Confirm your password"
                 autocomplete="new-password"
                 required
